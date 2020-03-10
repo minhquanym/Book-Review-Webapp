@@ -1,4 +1,4 @@
-{% extends "layout_pre_login.html" %}
+{% extends "layout_after_login.html" %}
 
 {% block title %}
     Welcome!
@@ -6,5 +6,11 @@
 
 
 {% block body %}
-    
+    <ul>
+        {% for book in books %}
+            <li>
+                <p>{{book.title}} of {{book.author}} written in {{book.year}}</p>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

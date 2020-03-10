@@ -6,6 +6,19 @@
 
 
 {% block body %}
-    
-
+    <div class="formTable">
+        <form action="{{ url_for('newuser')}}" method="post">
+            <div class="form-group" class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <input class="form-control" name="username" placeholder="User Name">
+                <input type="password" class="form-control" name="password" placeholder="Password">
+                <input type="password" class="form-control" name="password2" placeholder="Confirm password">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary">Register</button>
+            </div>
+            <div>
+                <p>{{ message }}</p>
+            </div>
+        </form>
+    </div>
 {% endblock %}

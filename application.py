@@ -14,25 +14,52 @@ curUserId = -1
 @app.route("/")
 def index():
     if curUserId != -1:
-        return render_template("welcome.html", curUserId)
+        return render_template("welcome.html")
     return render_template("index.html", message="")
 
 @app.route("/login", methods = ["POST"])
 def login():
     # Login to your account
+    global curUserId
     if curUserId != -1:
-        return render_template("welcome.html", curUserId)
+        return render_template("welcome.html")
     username = request.form.get("username")
     password = request.form.get("password")
     
     user = User.query.filter(and_(User.username == username, User.password == password)).first()
     if not user:
         return render_template("index.html", message="Your username or password is wrong")
-
-    return render_template("login.html")
+    curUserId = user.id
+    return render_template("welcome.html")
 
 @app.route("/register")
 def register():
+    global curUserId
     if curUserId != -1:
-        return render_template("welcome.html", curUserId)
-    return render_template("register.html")
+        return render_template("welcome.html")
+    return render_template("register.html", message="")
+
+@app.route("/logout")
+def logout():
+    curUserId = -1
+    return render_template("index.html", message="")
+
+@app.route("/newuser", methods = ["POST"])
+def newuser():
+    username = request.form.get("username")
+    password = request.form.get("password")
+    password2 = request.form.get("password2")
+    
+    if password != password2:
+        return render_template("register.html", message="Confirm password not match")
+    
+    exists = db.session.query(db.session.query(User).filter_by(username=username).exists()).scalar()
+
+    if exists == True:
+        return render_template("register.html", message="Username not available")
+
+    user = User(username=username, password=password)
+    db.session.add(user)
+    db.session.commit()
+    return render_template("index.html", message="You registered completely. Lets login to review books")
+    
