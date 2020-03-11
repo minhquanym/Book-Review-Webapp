@@ -1,0 +1,19 @@
+{% extends "layout_pre_login.html" %}
+
+{% block title %}
+    Book
+{% endblock %}
+
+
+{% block body %}
+    <h2>Book Info</h2>
+    <ul>
+        <li><h3>{{book.title}}</h3></li>
+        <li><h3>{{book.author}}</h3></li>
+        <li><h3>{{book.year}}</h3></li>
+    </ul>
+    <h2>
+        Comment
+    </h2>
+    
+{% endblock %}
