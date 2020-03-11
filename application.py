@@ -45,6 +45,7 @@ def register():
 
 @app.route("/logout")
 def logout():
+    global curUserId
     curUserId = -1
     return render_template("index.html", message="")
 
@@ -78,4 +79,13 @@ def book(book_id):
     book = Book.query.get(book_id)
     if book is None:
         return render_template("welcome.html")
-    return render_template("book.html", book=book)
+    comments = book.comments
+    return render_template("book.html", book=book, comments=comments)
+
+@app.route("/addcomment", methods = ["POST", "GET"])
+def addcomment():
+    global curUserId
+    if curUserId == -1:
+        return render_template("index.html", message="You must login to leave comment")
+    text = request.form.get("comment")
+    comment = Comment(text=text, user_id=curUserId)

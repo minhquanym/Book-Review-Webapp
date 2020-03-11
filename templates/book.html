@@ -15,5 +15,18 @@
     <h2>
         Comment
     </h2>
+    <ul>
+        {% for comment in comments %}
+        <li>
+            <h3><b>{{comment.user_id}}</b> say {{comment.text}}</h3>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <form action="/addcomment", method="POST">
+        <input class="form-control" name="comment" type="text" placeholder="Leave your comment">
+        <button class="btn btn-info" type="button">Comment</button>
+    </form>
+
     
 {% endblock %}
