@@ -151,3 +151,5 @@ def book(isbn):
         comments = book.comments
         return render_template("book.html", book=book, comments=comments)
         
+if __name__ == '__main__':
+    app.run()

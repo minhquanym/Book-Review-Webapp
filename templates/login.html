@@ -7,9 +7,9 @@
 
 {% block body %}
     <h2 class="pt-3">Log in your account</h2>
-    <div class="p-sm-5">
+    <main class="container">
         <form action="{{ url_for('login')}}" method="post">
-            <div class="form-group" class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="form-group" class="col-sm-2">
                 <input class="form-control" autofocus name="username" placeholder="User Name">
                 <input type="password" class="form-control" name="password" placeholder="Password">
             </div>
@@ -20,5 +20,5 @@
                 <p>{{ message }}</p>
             </div>
         </form>
-    </div>
+    </main>
 {% endblock %}
