@@ -1,0 +1,23 @@
+{% extends "layout_pre_login.html" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+
+{% block body %}
+    <div class="formTable">
+        <form action="{{ url_for('login')}}" method="post">
+            <div class="form-group" class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <input class="form-control" name="username" placeholder="User Name">
+                <input type="password" class="form-control" name="password" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary">Login</button>
+            </div>
+            <div>
+                <p>{{ message }}</p>
+            </div>
+        </form>
+    </div>
+{% endblock %}
