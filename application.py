@@ -1,6 +1,7 @@
 import os, json
 
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
+from flask_sqlalchemy import SQLAlchemy
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -18,6 +19,11 @@ if not os.getenv("DATABASE_URL"):
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# Configure session to use filesystem
+app.secret_key = "dit me deo hieu sao can secret key"
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
 db.init_app(app)
 
 
@@ -25,16 +31,15 @@ db.init_app(app)
 @login_required
 def index():
     """ Show search box """
-    return render_template("index.html")
+    books = Book.query.limit(15).all()
+    return render_template("index.html", books=books)
 
 @app.route("/login", methods = ["GET", "POST"])
 def login():
     """ Log in user """
 
     # Forget any user_id
-    db.session.clear()
-
-    
+    session.clear()
 
     # User reached route by submit form
     if request.method == "POST":
@@ -45,14 +50,14 @@ def login():
             return render_template("login.html", message="Must provide password")
 
         username = request.form.get("username")
-        password = request.form.get("password")
+        password = request.form.get("password") 
         # Check if username exist and password is correct
-        user = User.query.filter(User.username == username).fetchone()
+        user = User.query.filter(User.username == username).first()
         if user == None or not check_password_hash(user.hash, password):
             return render_template("login.html", message="Invalid username or password")
         # Remember which user has logged in
-        db.session["user_id"] = user.id
-        db.session["user_name"] = user.username
+        session["user_id"] = user.id
+        session["user_name"] = user.username
 
         # Redirect user to home page
         return redirect("/")
@@ -65,7 +70,7 @@ def logout():
     """ Log user out """
 
     # Forget any user_id
-    db.session.clear()
+    session.clear()
     # Redirect to home page
     return redirect("/")
 
@@ -74,7 +79,7 @@ def register():
     """ Register user """
 
     # Forget any user_id
-    db.session.clear()
+    session.clear()
 
     # User reach route by submit form (via POST)
     if request.method == "POST":
@@ -84,7 +89,7 @@ def register():
         
         username = request.form.get("username")
         # Check database if username has already existed
-        user = User.query.filter(User.username == username).fetchone()
+        user = User.query.filter(User.username == username).first()
         if user:
             return render_template("register.html", message="Username not available")
         
@@ -101,4 +106,38 @@ def register():
         user = User(username=username, hash=hashedPassword)
         db.session().add(user)
         db.session().commit()
+        
+        # flash('Account created', 'info')
+        
+        return redirect("/login")
 
+    # User reach via GET
+    else:
+        return render_template("register.html")
+
+@app.route("/search", methods=["GET"])
+@login_required
+def search():
+    """ Get book search results """
+
+    # Take input 
+    query = "%" + request.args.get("search") + "%"
+
+    books = Book.query.filter(or_(Book.isbn.like(query), or_(Book.title.like(query), Book.author.like(query)))).limit(15).all()
+
+    if not books:
+        return render_template("index.html", books = books, message="No book match your description")
+    else:
+        return render_template("index.html", books = books, message="Result search for '" + request.args.get("search") + "':")
+
+@app.route("/book/<isbn>", methods=["GET", "POST"])
+@login_required
+def book(isbn):
+    """Save and show user reviews"""
+
+    if request.method == "POST":
+        # Get info of current user
+        currentUser = session["user_id"]
+
+        rating = request.form.get("rating")
+        comment = request.form.get("comment")

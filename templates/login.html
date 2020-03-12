@@ -1,4 +1,4 @@
-{% extends "layout_pre_login.html" %}
+{% extends "layout.html" %}
 
 {% block title %}
     Login
@@ -6,10 +6,11 @@
 
 
 {% block body %}
-    <div class="formTable">
+    <h2 class="pt-3">Log in your account</h2>
+    <div class="p-sm-5">
         <form action="{{ url_for('login')}}" method="post">
             <div class="form-group" class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                <input class="form-control" name="username" placeholder="User Name">
+                <input class="form-control" autofocus name="username" placeholder="User Name">
                 <input type="password" class="form-control" name="password" placeholder="Password">
             </div>
             <div class="form-group">

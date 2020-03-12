@@ -1,4 +1,4 @@
-{% extends "layout_pre_login.html" %}
+{% extends "layout.html" %}
 
 {% block title %}
     Index
@@ -6,5 +6,13 @@
 
 
 {% block body %}
-    <h2> Welcome to summoner rift</h2>>
+    <h2> Welcome to summoner rift</h2>
+    <h3>{{message}}</h3>
+    <ul class="m-5">
+        {% for book in books %}
+        <li>
+            <h3>{{book.title}} written by {{book.author}}</h3>
+        </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
