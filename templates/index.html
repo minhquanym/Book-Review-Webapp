@@ -11,7 +11,9 @@
     <ul class="m-5">
         {% for book in books %}
         <li>
-            <h3>{{book.title}} written by {{book.author}}</h3>
+            <a href="/book/{{book.isbn}}">
+                <h3>{{book.title}} written by {{book.author}}</h3>
+            </a>
         </li>
         {% endfor %}
     </ul>

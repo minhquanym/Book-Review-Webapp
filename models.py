@@ -15,10 +15,10 @@ class Book(db.Model):
     year = db.Column(db.Integer, nullable=False)
     comments = db.relationship("Comment", backref="book", lazy=True)
     
-    def add_comment(self, text):
-        cmt = Comment(text=text, book_id=self.id)
-        db.session().add(cmt)
-        db.session().commit()
+    def add_comment(self, text, username):
+        cmt = Comment(text=text, book_id=self.id, username=username)
+        db.session.add(cmt)
+        db.session.commit()
 
 class User(db.Model):
     __tablename__ = "users"
@@ -31,5 +31,4 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String, nullable=False)
     username = db.Column(db.String, nullable=False)
-    time = db.Column(db.Time, nullable=False)
     book_id = db.Column(db.Integer, db.ForeignKey("books.id"), nullable=False)

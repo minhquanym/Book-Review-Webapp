@@ -137,7 +137,17 @@ def book(isbn):
 
     if request.method == "POST":
         # Get info of current user
-        currentUser = session["user_id"]
+        curUserId = session["user_id"]
+        user = User.query.get(curUserId) 
 
-        rating = request.form.get("rating")
         comment = request.form.get("comment")
+
+        book = Book.query.filter(Book.isbn == isbn).first()
+        book.add_comment(text=comment, username=user.username)
+
+        return redirect("/book/" + book.isbn)
+    else:
+        book = Book.query.filter(Book.isbn == isbn).first()
+        comments = book.comments
+        return render_template("book.html", book=book, comments=comments)
+        
