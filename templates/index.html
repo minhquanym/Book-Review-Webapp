@@ -6,15 +6,22 @@
 
 
 {% block body %}
-    <h2> Welcome to summoner rift</h2>
+    <h2> My first web project</h2>
     <h3>{{message}}</h3>
-    <ul class="m-5">
+    <div class="container row flex-container">
         {% for book in books %}
-        <li>
-            <a href="/book/{{book.isbn}}">
-                <h3>{{book.title}} written by {{book.author}}</h3>
-            </a>
-        </li>
+        <div class="card border-secondary mb-3 m-2" style="width: 12rem">
+            <img class="card-img-top" src="http://covers.openlibrary.org/b/isbn/{{book.isbn}}-M.jpg" alt="Card image cap">
+            <div class="card-body">
+                <h4 class="card-title">{{book.title}}</h4>
+                <h6 class="card-text">{{book.author}}</h6>
+                <h6 class="card-text">{{book.year}}</h6>
+                <h6 class="card-text">{{book.isbn}}</h6>
+            </div>
+            <div class="card-footer">
+                <a href="/book/{{book.isbn}}" class="card-link">Go to book page</a>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}

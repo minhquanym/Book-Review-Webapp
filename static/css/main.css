@@ -4,12 +4,21 @@ body {
 }
 h2 {
     color: rgb(179, 62, 62);
-    
 }
 h3 {
     color: rgb(32, 26, 88)
 }
-.form-control {
-    
-    width: auto;
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: baseline;
+}
+.comment {
+    background-color: orange;
+    text-align: center;
+}
+.user {
+    color: coral;
 }
